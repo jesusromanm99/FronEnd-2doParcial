@@ -1,0 +1,16 @@
+import React from "react";
+import { Text,StyleSheet } from "react-native";
+
+export default function Pacientes(){
+    return(
+        <Text style={styles.container}>Pacientes</Text>
+    )
+}
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
