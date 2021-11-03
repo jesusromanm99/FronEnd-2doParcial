@@ -1,11 +1,11 @@
 import React from "react";
 import { Text,StyleSheet } from "react-native";
-import { DataTable } from 'react-native-paper';
+import { Button, DataTable } from 'react-native-paper';
 import { Ionicons,AntDesign } from '@expo/vector-icons';
 import colors from "../../res/colors";
 import { FAB } from 'react-native-paper';
-
-
+import { getAllReservation } from "../../libs/http";
+import { getScheduleByClient } from "../../libs/http";
 
 export default function Reserva({navigation}){
    
@@ -15,6 +15,16 @@ export default function Reserva({navigation}){
     const goToEditReservation=()=>{
         navigation.navigate('EditarReserva')
     }   
+    const getReservation=async()=>{
+            const {data,error}=await getAllReservation()
+    }
+    const filterByClient=async(idCliente=7)=>{
+        const {data,error}=await getScheduleByClient(7)
+
+    }
+    React.useEffect(()=>{
+        getReservation()
+    },[])
     return(
         <>
              <DataTable style={{marginLeft:0}}>
@@ -38,7 +48,7 @@ export default function Reserva({navigation}){
 
                 
              </DataTable>     
-            
+            <Button onPress={filterByClient}>Filtrar Por cliente</Button>
             <FAB
                 style={styles.fab}
                 icon="plus"
