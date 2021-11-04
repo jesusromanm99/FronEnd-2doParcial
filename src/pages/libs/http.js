@@ -5,6 +5,29 @@ const server="https://equipoyosh.com/"
 
 /* ----------------Global----------------------------- */
 
+/*Obtener solo los usuarios del sistema con UserLogin!=null */
+const getUsersFromSystem=async()=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    try{
+        const {data} = await axios.get(endPoint,{params:{ejemplo:{"soloUsuariosDelSistema":true}}})
+        return {data}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+/* Obtener los usuarios con UserLogin igual a null */
+const getUsers=async()=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    try{
+        const {data} = await axios.get(endPoint)
+        return {data:data.lista.filter(user=>user.usuarioLogin==null)}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
 /* ----------------Reserva---------------------------- */
 
 /*Obtener todas las reservas */
@@ -103,5 +126,7 @@ export {
     deleteReservation,
     updateReservation,
     getScheduleClear,
-    getScheduleByClient
+    getScheduleByClient,
+    getUsersFromSystem,
+    getUsers
 }
