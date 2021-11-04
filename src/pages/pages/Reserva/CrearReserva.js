@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Text,TextInput,Divider } from "react-native-paper";
-import { createReservation,getScheduleClear } from "../../libs/http";
+import { Button, Text,TextInput,Divider,Modal,Portal } from "react-native-paper";
+import { createReservation,getScheduleClear,getUsersFromSystem,getUsers } from "../../libs/http";
 import DropDown from "react-native-paper-dropdown";
-import { StyleSheet,View } from "react-native";
+import { ScrollView, StyleSheet,View } from "react-native";
 import colors from "../../res/colors";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -18,7 +18,12 @@ const CrearReserva=()=>{
     const [showDropDownFisio, setShowDropDownFisio] = React.useState(false);
     const [showDropDownClient, setShowDropDownClient] = React.useState(false);
     const [showDate,setShowDate]=React.useState(false)
-
+    const [clientOptions,setClientOptions]=React.useState([])
+    const [fisioOptions,setFisioOptions]=React.useState([])
+    const [visible, setVisible] = React.useState(false);
+    
+    
+    const [timeSelected,setTimeSelected]=React.useState('')
     /*   variables temporables */
     const addReservation=async()=>{
             const {data,error}=await createReservation(
@@ -31,40 +36,55 @@ const CrearReserva=()=>{
                 }
             )
     }
-    const FisioOptions=[
-        {
-            'label':'Jesus',
-            'value':'1'
-        },
-        {
-            'label':'Carlos',
-            'value':'2'
-        }
-    ]
+    const containerStyle = {backgroundColor: 'white', padding: 10};
+    const list=new Array(100).fill('1').map((_,index)=>{return {'label':index+'','value':index+''}});
 
-    const ClientOptions=[
-        {
-            'label':'Juan',
-            'value':'1'
-        },
-        {
-            'label':'Fer',
-            'value':'2'
-        }
-    ]
+    
 
     /* Methods */
     const getScheduleFree=async()=>{
-        const {data,error}=await getScheduleClear(4,'20190903')
+        console.log('AGENDALibre',fechaCadena,idEmpleado)
+        const {data,error}=await getScheduleClear(idEmpleado,fechaCadena)
+        showModal()
     }
     const onChangeDate=(event, selectedDate) => {
-        const currentDate = selectedDate || fecha;
+        const d = selectedDate || fecha;
         setShowDate(false);
-        setFecha(currentDate);
+        setFecha(d);
+        setFechaCadena(`${d.getFullYear()}${ ('0' + (d.getMonth() + 1)).slice(-2)}${('0' + d.getDate()).slice(-2)}`)
       };
     /* Use Effect */
+
+    /*Use Effect para inicializar la lista de fisioterapeutas */
+    React.useEffect(async ()=>{
+        const {data,error}= await getUsersFromSystem()
+        if(data){
+            setFisioOptions(data.lista.map(user => {
+                return {
+                    'label':`${user.nombre} ${user.apellido}`,
+                    'value':`${user.idPersona}`
+                }
+            }));
+        }
+    },[])
+
+     /*Use Effect para inicializar la lista de Clientes */
+     React.useEffect(async ()=>{
+        const {data,error}= await getUsers()
+        
+        if(data){
+            setClientOptions(data.map(user => {
+                return {
+                    'label':`${user.nombre} ${user.apellido}`,
+                    'value':`${user.idPersona}`
+                }
+            }));
+        }
+    },[])
+
     return(
-        <View style={styles.container}> 
+        <ScrollView style={styles.container}> 
+
             <Text style={styles.containeritem}> Filtro:</Text>
             <DropDown
                      label={"Fisioterapeuta"}
@@ -74,9 +94,9 @@ const CrearReserva=()=>{
                      onDismiss={() => setShowDropDownFisio(false)}
                      value={idEmpleado}
                      setValue={setEmpleado}
-                     list={FisioOptions}
+                     list={fisioOptions}
                      style={styles.containeritem}
-            />
+            />             
             <Button
                 labelStyle={{textDecorationLine:'underline'}}
                 uppercase={false}
@@ -85,17 +105,21 @@ const CrearReserva=()=>{
            
             {showDate && 
                 <DateTimePicker
-                testID="dateTimePicker"
+                
                 value={fecha}
                 mode="date"
                 display="default"
                 onChange={onChangeDate}
+                textColor={colors.primary}
+                
                  />
             }
             
             <Button  mode="contained" style={styles.containeritem}  onPress={getScheduleFree}>Obtener agenda Libre</Button>
              <Divider colors={colors.primary}/>
-             <Text style={styles.containeritem}> Crear Reserva:</Text>
+            
+            {/* Crear Reserva*/}
+            <Text style={styles.containeritem}> Crear Reserva:</Text>
             <DropDown
                      label={"Cliente"}
                      mode={"outlined"}
@@ -104,15 +128,30 @@ const CrearReserva=()=>{
                      onDismiss={() => setShowDropDownClient(false)}
                      value={idCliente}
                      setValue={setIdCliente}
-                     list={ClientOptions}
+                     list={clientOptions}
                      style={styles.containeritem}
             />
-            <Text style={styles.containeritem}> Fecha: {fechaCadena}</Text>
-            <Text style={styles.containeritem}> Hora Inicio: {horaInicioCadena}</Text>
-            <Text style={styles.containeritem}> Hora Fin: {horaFinCadena}</Text>
+            <DropDown
+                     label={"Horarios Disponibles"}
+                     mode={"outlined"}
+                     visible={visible}
+                     showDropDown={() => setVisible(true)}
+                     onDismiss={() => setVisible(false)}
+                     value={timeSelected}
+                     setValue={setTimeSelected}
+                     list={list}
+                     style={styles.containeritem}
+            />
+              <TextInput
+                label="Fecha"
+                mode="outlined"
+                value={fechaCadena}
+                blur
+                style={styles.containeritem}
+            />
             <Button mode="contained" onPress={addReservation}>Crear Reserva</Button>
             
-        </View>
+        </ScrollView>
     )
 }
 const styles=StyleSheet.create({
