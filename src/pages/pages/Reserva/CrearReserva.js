@@ -84,8 +84,8 @@ const CrearReserva=()=>{
 
     return(
         <ScrollView style={styles.container}> 
-
-            <Text style={styles.containeritem}> Filtro:</Text>
+            {/* Filtro de la Reserva */}
+            <Text style={[styles.containeritem,styles.title]}> Obtener agenda:</Text>
             <DropDown
                      label={"Fisioterapeuta"}
                      mode={"outlined"}
@@ -96,12 +96,12 @@ const CrearReserva=()=>{
                      setValue={setEmpleado}
                      list={fisioOptions}
                      style={styles.containeritem}
-            />             
-            <Button
-                labelStyle={{textDecorationLine:'underline'}}
-                uppercase={false}
-                onPress={()=>setShowDate(true)}
-            >  Seleccionar una fecha</Button>
+            />
+            <Text style={styles.containeritem}>
+                <Text style={{textDecorationLine:'underline',color:colors.primary,fontWeight: 'bold'}}  onPress={()=>setShowDate(true)}>Fecha de Reserva:</Text>
+                <Text>{' '+fecha.toLocaleDateString()}</Text>
+            </Text>             
+            
            
             {showDate && 
                 <DateTimePicker
@@ -119,7 +119,7 @@ const CrearReserva=()=>{
              <Divider colors={colors.primary}/>
             
             {/* Crear Reserva*/}
-            <Text style={styles.containeritem}> Crear Reserva:</Text>
+            <Text style={[styles.containeritem,styles.title]}> Crear reserva:</Text>
             <DropDown
                      label={"Cliente"}
                      mode={"outlined"}
@@ -145,9 +145,10 @@ const CrearReserva=()=>{
               <TextInput
                 label="Fecha"
                 mode="outlined"
-                value={fechaCadena}
+                value={fecha.toLocaleDateString()}
                 blur
                 style={styles.containeritem}
+                disabled
             />
             <Button mode="contained" onPress={addReservation}>Crear Reserva</Button>
             
@@ -160,7 +161,7 @@ const styles=StyleSheet.create({
         marginVertical:10
     },
     title:{
-        fontSize:15
+        fontSize:23
     },
     containeritem:{
         marginVertical:15

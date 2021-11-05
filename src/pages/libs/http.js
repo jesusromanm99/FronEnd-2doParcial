@@ -35,7 +35,7 @@ const getAllReservation=async()=>{
     const endPoint=server+'stock-nutrinatalia/reserva'
     try{
         const {data}=await axios.get(endPoint)
-        console.log('Data',data)
+        
         return {data}
     }catch(error){
             console.log('Error:',error)
