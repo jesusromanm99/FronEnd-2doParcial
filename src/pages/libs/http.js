@@ -118,6 +118,27 @@ const getScheduleByClient=async(idPersona)=>{
 
 /*----------------------Paciente--------------------------- */
 
+const getPacientes = async(name, lastname)=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    try{
+        let queryParams = ''
+        if(name && lastname){
+            queryParams = `?like=S&ejemplo={"nombre":"${name}","apellido":"${lastname}"}`
+        }else if (name){
+            queryParams = `?like=S&ejemplo={"nombre":"${name}"}`
+        }
+        else if (lastname){
+            queryParams = `?like=S&ejemplo={"apellido":"${lastname}"}`
+        }
+        queryParams = encodeURI(queryParams)
+        const {data}=await axios.get(endPoint+queryParams)
+        return {data: data.lista}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+} 
+
 
 /*Export  */
 export {
@@ -128,5 +149,6 @@ export {
     getScheduleClear,
     getScheduleByClient,
     getUsersFromSystem,
-    getUsers
+    getUsers,
+    getPacientes,
 }
