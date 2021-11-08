@@ -6,6 +6,7 @@ import EditarReserva from '../../pages/Reserva/EditarReserva'
 import CrearReserva from '../../pages/Reserva/CrearReserva'
 import Ficha from '../../pages/Ficha/Ficha';
 import Pacientes from '../../pages/Pacientes/Pacientes';
+import CrearFicha from '../../pages/Ficha/CrearFicha';
 
 const ReservaStack = createNativeStackNavigator();
 const ReservaStackNavigator=()=>{
@@ -38,6 +39,11 @@ const FichaStackNavigator=()=>{
             name="Ficha"
              component={Ficha}
              options={{ title: 'Ficha' }}
+             />
+             <FichaStack.Screen 
+            name="CrearFicha"
+             component={CrearFicha}
+             options={{ title: 'Crear Ficha' }}
              />
         </FichaStack.Navigator>
     )

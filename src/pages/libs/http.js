@@ -130,6 +130,36 @@ const getScheduleByClient=async(idPersona)=>{
 
 /*---------------------Ficha------------------------------ */
 
+/*Obtener todas las Fichas */
+const getAllFicha=async()=>{
+    const endPoint=server+'stock-nutrinatalia/fichaClinica'
+    try{
+        const {data}=await axios.get(endPoint)
+        console.log('Fichas',data)
+        return {data}
+    }catch(error){
+            console.log('Error:',error)
+            return {error}
+    }
+
+}
+
+/* Crear una nueva reserva */
+const createFicha=async({motivoConsulta,diagnostico,observacion,idEmpleado,idCliente,idTipoProducto})=>{
+    const endPoint=server+'stock-nutrinatalia/fichaClinica'
+    try{
+        const {data}=await axios.post(endPoint,{motivoConsulta,diagnostico,observacion,
+                'idCliente':{'idPersona':idCliente},'idEmpleado':{'idPersona':idEmpleado},'idTipoProducto':idTipoProducto
+        })
+        console.log('Data',data)
+        return {data}
+    }catch(error){
+            console.log('Error',error.response.data)
+            return {error}
+    }
+}
+
+
 
 /*----------------------Paciente--------------------------- */
 
@@ -144,5 +174,7 @@ export {
     getScheduleByClient,
     getUsersFromSystem,
     getUsers,
-    getReservation
+    getReservation,
+    createFicha,
+    getAllFicha
 }
