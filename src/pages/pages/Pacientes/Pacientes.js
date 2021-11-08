@@ -16,7 +16,7 @@ import colors from "../../res/colors";
 import { FAB } from "react-native-paper";
 import { getPacientes } from "../../libs/http";
 
-export default function Pacientes() {
+export default function Pacientes({navigation}) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
   const [data, setData] = React.useState([]); 
@@ -43,6 +43,31 @@ export default function Pacientes() {
     getPacientes(nombre, apellido).then((res) => {
       setData(res.data)
     })
+  }
+
+  const [ascSort,setAscSort] = useState(true)
+  const handleSort = (sortBy) =>{
+	//   console.log("before", ascSort)
+	  setAscSort(!ascSort)
+	//   console.log("after", ascSort)
+	// alert('ya aprete')
+	const sortedData = data.sort((a,b) => {
+		if (ascSort) {
+			return a[sortBy] > b[sortBy] ? 1 : -1
+		} else {
+			return b[sortBy] > a[sortBy] ? 1 : -1
+		}
+	});
+	// console.log(sortedData.map(x=>x.nombre))
+	// console.log(ascSort)
+	// console.log(sortedData)
+	// setData([]);
+	setData([...sortedData]);
+  }
+
+  const handleFabPress = () => {
+	  navigation.navigate('CrearPaciente')
+
   }
 
 	return (
@@ -82,10 +107,9 @@ export default function Pacientes() {
 			</View>
 
 			<Divider style={styles.space} colors={colors.primary} />
-      <ScrollView>
         <DataTable style={{ marginLeft: 0 }}>
           <DataTable.Header>
-            <DataTable.Title style={styles.cell}>
+            <DataTable.Title style={styles.cell} onPress={_=>handleSort('nombre')} sortDirection={ascSort?'ascending':'descending'}>
               Nombre
             </DataTable.Title>
             <DataTable.Title style={styles.cell}>
@@ -99,9 +123,12 @@ export default function Pacientes() {
             </DataTable.Title>
             <DataTable.Title numeric>Opc.</DataTable.Title>
           </DataTable.Header>
+          </DataTable>
+      <ScrollView>
+      <DataTable style={{ marginLeft: 0 }}>
 
-          {data ? data.map(item => {
-              return  <DataTable.Row>
+          {data ? data.map((item, index) => {
+              return  <DataTable.Row key={index}>
               <DataTable.Cell style={styles.cell}>{item.nombre}</DataTable.Cell>
               <DataTable.Cell style={styles.cell}>{item.apellido}</DataTable.Cell>
               <DataTable.Cell style={styles.cell}>{item.cedula}</DataTable.Cell>
@@ -123,8 +150,7 @@ export default function Pacientes() {
 			<FAB
 				style={styles.fab}
 				icon="plus"
-				// onPress={goToCreateReservation}
-				// onPress={goToCreateReservation}
+				onPress={handleFabPress}
 			/>
 		</View>
 	);

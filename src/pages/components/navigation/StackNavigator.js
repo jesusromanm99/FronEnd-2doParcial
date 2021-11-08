@@ -48,9 +48,14 @@ const PacienteStackNavigator=()=>{
     return(
         <PacienteStack.Navigator>
             <PacienteStack.Screen 
-            name="Paciente" 
-            component={Pacientes}
-            options={{ title: 'Paciente' }}
+                name="Paciente" 
+                component={Pacientes}
+                options={{ title: 'Paciente' }}
+            />
+            <PacienteStack.Screen
+                name="CrearPaciente"
+                component={Pacientes}
+                options={{ title: 'Crear Paciente' }}
             />
         </PacienteStack.Navigator>
     )

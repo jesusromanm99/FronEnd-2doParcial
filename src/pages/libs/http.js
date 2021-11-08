@@ -118,18 +118,23 @@ const getScheduleByClient=async(idPersona)=>{
 
 /*----------------------Paciente--------------------------- */
 
-const getPacientes = async(name, lastname)=>{
+const getPacientes = async(name, lastname, sortBy)=>{
     const endPoint=server+'stock-nutrinatalia/persona'
     try{
         let queryParams = ''
         if(name && lastname){
             queryParams = `?like=S&ejemplo={"nombre":"${name}","apellido":"${lastname}"}`
-        }else if (name){
+        }else if (name){    
             queryParams = `?like=S&ejemplo={"nombre":"${name}"}`
         }
         else if (lastname){
             queryParams = `?like=S&ejemplo={"apellido":"${lastname}"}`
         }
+        if(sortBy){
+            queryParams+=`?&orderBy=${sortBy}`
+        }
+        console.log('QueryParams',queryParams)
+        console.log('url', endPoint+queryParams)
         queryParams = encodeURI(queryParams)
         const {data}=await axios.get(endPoint+queryParams)
         return {data: data.lista}
