@@ -4,7 +4,8 @@ import axios from "axios"
 const server="https://equipoyosh.com/"
 
 /* ----------------Global----------------------------- */
-
+axios.defaults.headers.post['usuario'] = 'usuario1' 
+axios.defaults.headers.put['usuario'] = 'usuario1' 
 /*Obtener solo los usuarios del sistema con UserLogin!=null */
 const getUsersFromSystem=async()=>{
     const endPoint=server+'stock-nutrinatalia/persona'
@@ -44,6 +45,20 @@ const getAllReservation=async()=>{
 
 }
 
+/*Obtener una unica reservas */
+const getReservation=async(idReserva)=>{
+    const endPoint=server+'stock-nutrinatalia/reserva/'+idReserva
+    try{
+        const {data}=await axios.get(endPoint)
+        
+        return {data}
+    }catch(error){
+            console.log('Error:',error.response)
+            return {error}
+    }
+
+}
+
 /* Crear una nueva reserva */
 const createReservation=async({fechaCadena,horaInicioCadena,horaFinCadena,idEmpleado,idCliente})=>{
     const endPoint=server+'stock-nutrinatalia/reserva'
@@ -73,13 +88,13 @@ const deleteReservation=async(idReservation)=>{
 
 /*Actualiza una reserva */
 const updateReservation=async({idReserva,observacion,flagAsistio})=>{
-    const endPoint=server+'stock-nutrinatalia/reserva'
+    const endPoint=server+'stock-nutrinatalia/reserva/'
     try{
         const {data}=await axios.put(endPoint,{idReserva,observacion,flagAsistio})
-        console.log('Data',data)
-        return {data}
+        
+        return {data:"OK"}
     }catch(error){
-            console.log('Error',error.response.data)
+            //console.log('Error',error.response)
             return {error}
     }
 }
@@ -89,10 +104,10 @@ const getScheduleClear=async(idEmpleado,fecha,disponible='S')=>{
     const endPoint=`${server}stock-nutrinatalia/persona/${idEmpleado}/agenda`
     try{
         const {data}=await axios.get(endPoint,{ params: {fecha,disponible} } )
-        console.log('Data',data)
+        
         return {data}
     }catch(error){
-            console.log('Error:',error.response)
+            console.log('Error:',error.response.data)
             return {error}
     }
 }
@@ -128,5 +143,6 @@ export {
     getScheduleClear,
     getScheduleByClient,
     getUsersFromSystem,
-    getUsers
+    getUsers,
+    getReservation
 }
