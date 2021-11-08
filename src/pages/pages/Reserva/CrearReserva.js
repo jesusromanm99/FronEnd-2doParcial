@@ -90,8 +90,14 @@ const CrearReserva=({navigation})=>{
                     'value':`${user.idPersona}`
                 }
             }));
+            
         }
     },[])
+
+    /* Use Effect para setear el fisioterapueta por defaul */
+    React.useEffect(()=>{
+        if(fisioOptions.length>0)setEmpleado(fisioOptions[0].value)
+    },[fisioOptions])
 
      /*Use Effect para inicializar la lista de Clientes */
      React.useEffect(async ()=>{

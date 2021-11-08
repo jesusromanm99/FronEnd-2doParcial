@@ -78,8 +78,8 @@ const deleteReservation=async(idReservation)=>{
     const endPoint=`${server}stock-nutrinatalia/reserva/${idReservation}`
     try{
         const {data}=await axios.delete(endPoint)
-        console.log('Data',data)
-        return {data}
+        
+        return {data:'Ok'}
     }catch(error){
             console.log('Error',error.response.data)
             return {error}
