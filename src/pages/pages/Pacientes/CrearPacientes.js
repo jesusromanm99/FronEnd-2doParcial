@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
 	Button,
-	Text,
 	TextInput,
 	Divider,
-	Modal,
-	Portal,
 } from "react-native-paper";
 import {
-	createReservation,
-	getScheduleClear,
-	getUsersFromSystem,
-	getUsers,
     createPaciente
 } from "../../libs/http";
 import DropDown from "react-native-paper-dropdown";

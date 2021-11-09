@@ -4,12 +4,8 @@ import { Text, StyleSheet, View, ScrollView } from "react-native";
 import {
 	Button,
 	DataTable,
-	Searchbar,
 	TextInput,
 	Divider,
-	Paper,
-	Checkbox,
-	Chip,
 } from "react-native-paper";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import colors from "../../res/colors";
@@ -20,18 +16,6 @@ export default function Pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
 	const [data, setData] = React.useState([]);
-
-	const [colors, setColors] = useState({
-		value: "",
-		list: [
-			{ _id: "1", value: "BLUE" },
-			{ _id: "2", value: "RED" },
-			{ _id: "3", value: "GREEN" },
-			{ _id: "4", value: "YELLOW" },
-		],
-		selectedList: [],
-		error: "",
-	});
 
 	useEffect(() => {
 		getPacientes().then((res) => {
@@ -47,10 +31,7 @@ export default function Pacientes({ navigation }) {
 
 	const [ascSort, setAscSort] = useState(true);
 	const handleSort = (sortBy) => {
-		//   console.log("before", ascSort)
 		setAscSort(!ascSort);
-		//   console.log("after", ascSort)
-		// alert('ya aprete')
 		const sortedData = data.sort((a, b) => {
 			if (ascSort) {
 				return a[sortBy] > b[sortBy] ? 1 : -1;
@@ -58,10 +39,7 @@ export default function Pacientes({ navigation }) {
 				return b[sortBy] > a[sortBy] ? 1 : -1;
 			}
 		});
-		console.log(sortedData.map(x=>x.tipoPersona))
-		// console.log(ascSort)
-		// console.log(sortedData)
-		// setData([]);
+		console.log(sortedData.map((x) => x.tipoPersona));
 		setData([...sortedData]);
 	};
 
@@ -143,7 +121,15 @@ export default function Pacientes({ navigation }) {
 										<DataTable.Cell numeric>
 											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
 											<AntDesign
-												name="edit"
+												name='edit'
+												size={20}
+												color={colors.primary}
+											/>
+										</DataTable.Cell>
+										<DataTable.Cell numeric>
+											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
+											<AntDesign
+												name='delete'
 												size={20}
 												color={colors.primary}
 											/>
