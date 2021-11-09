@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import { Text, StyleSheet, View, ScrollView, ToastAndroid, Keyboard } from "react-native";
+import {
+	Text,
+	StyleSheet,
+	View,
+	ScrollView,
+	ToastAndroid,
+	Keyboard,
+} from "react-native";
 import { Button, DataTable, TextInput, Divider } from "react-native-paper";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import colors from "../../res/colors";
@@ -11,7 +18,7 @@ export default function pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
 	const [data, setData] = React.useState([]);
-	const [hide, setHide] = React.useState(true);
+	const [hide, setHide] = React.useState(false);
 
 	useEffect(() => {
 		getPacientes().then((res) => {
@@ -69,6 +76,13 @@ export default function pacientes({ navigation }) {
 			console.log(error);
 		}
 	};
+	
+	const handleRecargar = () => {
+		getPacientes().then((res) => {
+			setData(res.data);
+			ToastAndroid.show("Pacientes actualizados", ToastAndroid.SHORT);
+		});
+	};
 
 	return (
 		<View style={styles.container}>
@@ -107,6 +121,12 @@ export default function pacientes({ navigation }) {
 				</View>
 			) : (
 				<View style={styles.col2}>
+					<Button
+						mode="contained"
+						onPress={handleRecargar}
+					>
+						Recargar
+					</Button>
 					<Button
 						mode="contained"
 						onPress={(_) => setHide(!hide)}
