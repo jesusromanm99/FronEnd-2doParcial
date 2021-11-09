@@ -6,7 +6,7 @@ import colors from "../res/colors";
 
 const FichaClinicaItem=({idFichaClinica,motivoConsulta,idCliente,idEmpleado,diagnostico,idTipoProducto,navigation})=>{
     const goToEditFichaClinica=()=>{
-        navigation.navigate('EditarReserva',{idFichaClinica})
+        navigation.navigate('EditarFichaClinica',{idFichaClinica})
     } 
     return(
 

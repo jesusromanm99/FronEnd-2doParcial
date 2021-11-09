@@ -33,8 +33,6 @@ export default function Ficha({navigation}){
   
   return(
       <>
-        <Text style={styles.container}>Ficha no carga</Text>
-
         <ScrollView 
           refreshControl={
               <RefreshControl
@@ -57,7 +55,7 @@ export default function Ficha({navigation}){
               {listFichas.map((item,index)=>{
                   return <FichaClinicaItem key={index} motivoConsulta={item.motivoConsulta} idCliente={item.idCliente} 
                                           idEmpleado={item.idEmpleado} diagnostico={item.diagnostico} idTipoProducto={item.idTipoProducto}
-                                           navigation={navigation} idReserva={item.idReserva}
+                                           navigation={navigation} idFichaClinica={item.idFichaClinica}
                                           />
               })}
               

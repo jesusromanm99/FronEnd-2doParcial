@@ -156,7 +156,21 @@ const getAllFicha=async()=>{
 
 }
 
-/* Crear una nueva reserva */
+/*Obtener una unica reservas */
+const getFichaClinica=async(idFichaClinica)=>{
+    const endPoint=server+'stock-nutrinatalia/fichaClinica/'+idFichaClinica
+    try{
+        const {data}=await axios.get(endPoint)
+        
+        return {data}
+    }catch(error){
+            console.log('Error:',error.response)
+            return {error}
+    }
+
+}
+
+/* Crear una nueva ficha clinica */
 const createFichaClinica=async({motivoConsulta,diagnostico,observacion,idEmpleado,idCliente,idTipoProducto})=>{
     const endPoint=server+'stock-nutrinatalia/fichaClinica'
     try{
@@ -171,6 +185,19 @@ const createFichaClinica=async({motivoConsulta,diagnostico,observacion,idEmplead
     }
 }
 
+
+/*Actualiza una ficha clinica */
+const updateFichaClinica=async({idFichaClinica,observacion})=>{
+    const endPoint=server+'stock-nutrinatalia/fichaClinica/'
+    try{
+        const {data}=await axios.put(endPoint,{idFichaClinica,observacion})
+        
+        return {data:"OK"}
+    }catch(error){
+            return {error}
+    }
+}
+
 /*----------------------Paciente--------------------------- */
 
 
@@ -180,12 +207,14 @@ export {
     createReservation,
     deleteReservation,
     updateReservation,
+    updateFichaClinica,
     getScheduleClear,
     getScheduleByClient,
     getUsersFromSystem,
     getUsers,
     getTipoProductos,
     getReservation,
+    getFichaClinica,
     createFichaClinica,
     getAllFicha
 }
