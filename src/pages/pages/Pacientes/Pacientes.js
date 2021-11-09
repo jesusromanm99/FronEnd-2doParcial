@@ -7,7 +7,7 @@ import colors from "../../res/colors";
 import { FAB } from "react-native-paper";
 import { getPacientes, deletePaciente } from "../../libs/http";
 
-export default function Pacientes({ navigation }) {
+export default function pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
 	const [data, setData] = React.useState([]);
@@ -16,6 +16,16 @@ export default function Pacientes({ navigation }) {
 		getPacientes().then((res) => {
 			setData(res.data);
 		});
+		const willFocusSubscription = navigation.addListener(
+			"focus",
+			() => {
+				getPacientes().then((res) => {
+					setData(res.data);
+				});
+			}
+		);
+
+		return willFocusSubscription;
 	}, []);
 
 	const handleFilter = () => {
@@ -45,20 +55,22 @@ export default function Pacientes({ navigation }) {
 	const handleDelete = async (index) => {
 		const paciente = data[index];
 		console.log(JSON.stringify(paciente));
-		console.log('try to delete', paciente.idPersona);
-		const {res,error} = await deletePaciente(paciente.idPersona);
+		console.log("try to delete", paciente.idPersona);
+		const { res, error } = await deletePaciente(paciente.idPersona);
 		// const res = true
 		// const error = false
 		// console.log("deleted.4");
 		// console.log(res);
-		if (res){
-			console.log('deleted');
-			const newData = data.filter((x) => x.idPersona !== paciente.idPersona);
+		if (res) {
+			console.log("deleted");
+			const newData = data.filter(
+				(x) => x.idPersona !== paciente.idPersona
+			);
 			setData(newData);
-			ToastAndroid.show('Paciente eliminado', ToastAndroid.SHORT);
+			ToastAndroid.show("Paciente eliminado", ToastAndroid.SHORT);
 		}
-		if(error){
-			alert("error al borrar!")
+		if (error) {
+			alert("error al borrar!");
 			console.log(error);
 		}
 	};
@@ -113,7 +125,9 @@ export default function Pacientes({ navigation }) {
 					<DataTable.Title style={styles.cell}>
 						Fec. Nac.
 					</DataTable.Title>
-					<DataTable.Title numeric>Opc.</DataTable.Title>
+					<DataTable.Title style={{ flex: 2 }}>
+						Opciones
+					</DataTable.Title>
 				</DataTable.Header>
 			</DataTable>
 			<ScrollView>
@@ -134,8 +148,21 @@ export default function Pacientes({ navigation }) {
 										<DataTable.Cell style={styles.cell}>
 											{item.fechaNacimiento}
 										</DataTable.Cell>
-										<DataTable.Cell numeric>
-											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
+										<DataTable.Cell
+											style={{
+												alignItems: "center",
+												justifyContent: "center",
+											}}
+											onPress={(_) =>
+												navigation.navigate(
+													"EditarPaciente",
+													{
+														id: data[index]
+															.idPersona,
+													}
+												)
+											}
+										>
 											<AntDesign
 												name="edit"
 												size={20}

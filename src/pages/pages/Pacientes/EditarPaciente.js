@@ -1,46 +1,91 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextInput, Divider } from "react-native-paper";
-import { createPaciente } from "../../libs/http";
-import DropDown from "react-native-paper-dropdown";
+import {
+	Button,
+	TextInput,
+	Divider,
+} from "react-native-paper";
+import {
+    createPaciente, deletePaciente, getPaciente
+} from "../../libs/http";
 import { Keyboard, ScrollView, StyleSheet, View } from "react-native";
 import colors from "../../res/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import CustomDialog from "../../components/CustomDialog";
-const crearPaciente = ({ navigation }) => {
+const editarPaciente = ({ route, navigation }) => {
 	/* State */
 	// nombre, apellido, teléfono, email, ruc, cedula, tipoPersona, fechaNacimiento
 	const [state, setState] = useState({
-		nombre: "",
-		apellido: "",
-		telefono: "",
-		email: "",
-		ruc: "",
-		cedula: "",
-		tipoPersona: "",
+		nombre:"",
+		apellido:"",
+		telefono:"",
+		email:"",
+		ruc:"",
+		cedula:"",
+		tipoPersona:"",
 		fechaNacimiento: "",
 	});
 	const [showDate, setShowDate] = React.useState(false);
 
-	const handleCreatePaciente = async () => {
-		const { data, error } = await createPaciente(state);
-		if (error) {
-			alert("Error al crear el paciente");
+    const handleSaveButton = async () => {
+		const removePaciente = async() => {
+			const {data, error} = await deletePaciente(route.params.id);
+			if (error) return false
+			if (data) return true
+		}
+		const rmOk = await removePaciente()
+		if(!rmOk){
+			alert("No se puede editar el paciente");
+			return;
+		}else{
+			console.log(">>>>>>>Paciente eliminado");
+		}
+		// wait 100ms 
+		await new Promise(resolve => setTimeout(resolve, 100));
+        const {data, error} = await createPaciente(state);
+        if (error){
+			alert("Error al crear el paciente"); 
 			console.log(error);
 		}
-		if (data) {
-			alert("Paciente creado con éxito");
-			navigation.goBack();
+		if(data){
+			alert("Paciente editado con éxito");
+			navigation.goBack()
 		}
-	};
-	const handleDatePicker = (e) => {
+
+    }
+
+	const handleDatePicker = (e)=>{
 		setShowDate(false);
-		if (e.type == "set") {
+		if (e.type === "set") {
 			const date = new Date(e.nativeEvent.timestamp);
-			setState({ ...state, fechaNacimiento: date.toLocaleDateString() });
+			setState({...state, fechaNacimiento:date.toLocaleDateString()});
 		}
 		console.log("date picker");
-		console.log(e);
-	};
+		console.log(e)
+	}
+
+	useEffect(async()=>{
+		const id = route.params.id;
+		console.log(id)
+		const {data,error} = await getPaciente(id);
+		if(error){
+			alert("Error al obtener el paciente");
+			console.log(error);
+		}
+		if (data){
+			const date = new Date(data.fechaNacimiento);
+			// add 12 hour to date
+			date.setHours(date.getHours() + 12);
+			data.fechaNacimiento = date.toLocaleDateString();
+			let newState 
+			Object.keys(state).forEach(key => {
+				newState = {...newState, [key]:data[key]?data[key]:""}
+			})
+			console.log(newState)
+			setState(newState);
+		}
+
+	},[])
+
 
 	return (
 		<ScrollView style={styles.container}>
@@ -66,7 +111,7 @@ const crearPaciente = ({ navigation }) => {
 				value={state.telefono}
 				onChangeText={(text) => setState({ ...state, telefono: text })}
 				style={styles.space}
-				keyboardType="number-pad"
+				keyboardType='number-pad'
 			/>
 			<TextInput
 				mode="outlined"
@@ -96,41 +141,37 @@ const crearPaciente = ({ navigation }) => {
 				mode="outlined"
 				label="Fecha de Nacimiento"
 				value={state.fechaNacimiento}
-				onChangeText={(text) =>
-					setState({ ...state, fechaNacimiento: text })
-				}
+				onChangeText={(text) => setState({ ...state, fechaNacimiento: text })}
 				style={styles.space}
 				showSoftInputOnFocus={false}
-				onFocus={() => {
-					setShowDate(true);
-					Keyboard.dismiss();
-				}}
+				onFocus={() => { setShowDate(true); Keyboard.dismiss() }}
 			/>
 
 			<Button
 				mode="contained"
 				style={styles.containeritem}
-				onPress={handleCreatePaciente}
+				onPress={handleSaveButton}
 			>
-				Crear Paciente
+				Guardar Paciente
 			</Button>
 			<Divider colors={colors.primary} />
-			{showDate && (
-				<DateTimePicker
-					value={
-						state.fechaNacimiento
-							? new Date(state.fechaNacimiento)
-							: new Date()
-					}
-					mode="date"
-					display="default"
-					onChange={handleDatePicker}
-					textColor={colors.primary}
-				/>
-			)}
+			{   showDate &&
+                    <DateTimePicker
+						value={
+							state.fechaNacimiento
+								? new Date(state.fechaNacimiento)
+								: new Date()
+						}
+						mode="date"
+						display="default"
+						onChange={handleDatePicker}
+						textColor={colors.primary}
+                    />
+                }
 		</ScrollView>
 	);
 };
+
 
 const styles = StyleSheet.create({
 	container: {
@@ -144,4 +185,4 @@ const styles = StyleSheet.create({
 		marginVertical: 15,
 	},
 });
-export default crearPaciente;
+export default editarPaciente;

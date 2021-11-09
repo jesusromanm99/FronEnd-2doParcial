@@ -147,10 +147,13 @@ const getPacientes = async(name, lastname, sortBy)=>{
 
 const createPaciente = async (paciente)=>{
     const endPoint=server+'stock-nutrinatalia/persona'
-    const fecha = paciente.fechaNacimiento
-    paciente.fechaNacimiento = fecha.length!=8 ? fecha: dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
-    paciente.tipoPersona='FISICA'
     try{
+        const fecha = paciente.fechaNacimiento
+        console.log('Fecha',fecha)
+        paciente.fechaNacimiento = dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
+        console.log('Paciente',paciente.fechaNacimiento)
+        paciente.tipoPersona='FISICA'
+        console.log('Paciente',paciente)
         const res = await axios.post(endPoint,paciente)
         return {data:res.data}
     }catch(error){
@@ -163,6 +166,16 @@ const deletePaciente = async (idPersona)=>{
     try{
         const res = await axios.delete(endPoint)
         return {res}
+    }catch(error){
+        return {error}
+    }
+}
+
+const getPaciente = async (idPersona)=>{
+    const endPoint=`${server}stock-nutrinatalia/persona/${idPersona}`
+    try{
+        const res = await axios.get(endPoint)
+        return {data:res.data}
     }catch(error){
         return {error}
     }
@@ -182,4 +195,5 @@ export {
     getPacientes,
     createPaciente,
     deletePaciente,
+    getPaciente,
 }
