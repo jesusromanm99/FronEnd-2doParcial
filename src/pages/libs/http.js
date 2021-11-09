@@ -29,6 +29,18 @@ const getUsers=async()=>{
         return {error}
     }
 }
+
+/* Obtener los productos */
+const getTipoProductos=async()=>{
+    const endPoint=server+'stock-nutrinatalia/tipoProducto'
+    try{
+        const {data} = await axios.get(endPoint)
+        return {data}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
 /* ----------------Reserva---------------------------- */
 
 /*Obtener todas las reservas */
@@ -150,7 +162,7 @@ const createFichaClinica=async({motivoConsulta,diagnostico,observacion,idEmplead
     try{
         const {data}=await axios.post(endPoint,
             { motivoConsulta,diagnostico,observacion,'idCliente':{'idPersona':idCliente},
-            'idEmpleado':{'idPersona':idEmpleado},'idTipoProducto':idTipoProducto })
+            'idEmpleado':{'idPersona':idEmpleado},'idTipoProducto':{'idTipoProducto':idTipoProducto} })
         console.log('Data',data)
         return {data}
     }catch(error){
@@ -172,6 +184,7 @@ export {
     getScheduleByClient,
     getUsersFromSystem,
     getUsers,
+    getTipoProductos,
     getReservation,
     createFichaClinica,
     getAllFicha

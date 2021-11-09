@@ -12,7 +12,7 @@ export default function Ficha({navigation}){
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(async() => {
       setRefreshing(true);
-      await getReservation()
+      await getFichaFromServer()
       setRefreshing(false)
   }, []);
 
