@@ -148,9 +148,7 @@ const getPacientes = async(name, lastname, sortBy)=>{
 const createPaciente = async (paciente)=>{
     const endPoint=server+'stock-nutrinatalia/persona'
     const fecha = paciente.fechaNacimiento
-    console.log('Fecha',fecha, typeof(fecha));
-    paciente.fechaNacimiento == 8 ? fecha: fecha.length== dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
-
+    paciente.fechaNacimiento = fecha.length!=8 ? fecha: dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
     paciente.tipoPersona='FISICA'
     try{
         const res = await axios.post(endPoint,paciente)
