@@ -173,6 +173,6 @@ export {
     getUsersFromSystem,
     getUsers,
     getReservation,
-    createFicha,
+    createFichaClinica,
     getAllFicha
 }
