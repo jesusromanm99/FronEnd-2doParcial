@@ -1,5 +1,4 @@
 import React from "react";
-import moment from "moment";
 
 import { Text,StyleSheet,View } from "react-native";
 import { Button, DataTable,Searchbar,TextInput,Divider } from 'react-native-paper';

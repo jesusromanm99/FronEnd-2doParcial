@@ -1,6 +1,7 @@
 /* HTTP REQUESTS  */
 
 import axios from "axios"
+import dateFormat from 'dateformat'
 const server="https://equipoyosh.com/"
 
 /* ----------------Global----------------------------- */
@@ -142,7 +143,22 @@ const getPacientes = async(name, lastname, sortBy)=>{
         console.log(error)
         return {error}
     }
-} 
+}
+
+const createPaciente = async (paciente)=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    const fecha = paciente.fechaNacimiento
+    console.log('Fecha',fecha, typeof(fecha));
+    paciente.fechaNacimiento == 8 ? fecha: fecha.length== dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
+
+    paciente.tipoPersona='FISICA'
+    try{
+        const res = await axios.post(endPoint,paciente)
+        return {data:res.data}
+    }catch(error){
+        return {error}
+    }
+}
 
 
 /*Export  */
@@ -156,4 +172,5 @@ export {
     getUsersFromSystem,
     getUsers,
     getPacientes,
+    createPaciente,
 }

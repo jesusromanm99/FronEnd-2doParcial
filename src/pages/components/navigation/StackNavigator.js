@@ -6,6 +6,7 @@ import EditarReserva from '../../pages/Reserva/EditarReserva'
 import CrearReserva from '../../pages/Reserva/CrearReserva'
 import Ficha from '../../pages/Ficha/Ficha';
 import Pacientes from '../../pages/Pacientes/Pacientes';
+import crearPaciente from '../../pages/Pacientes/CrearPacientes'
 
 const ReservaStack = createNativeStackNavigator();
 const ReservaStackNavigator=()=>{
@@ -54,7 +55,7 @@ const PacienteStackNavigator=()=>{
             />
             <PacienteStack.Screen
                 name="CrearPaciente"
-                component={Pacientes}
+                component={crearPaciente}
                 options={{ title: 'Crear Paciente' }}
             />
         </PacienteStack.Navigator>

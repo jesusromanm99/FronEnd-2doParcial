@@ -8,67 +8,66 @@ import {
 	TextInput,
 	Divider,
 	Paper,
-  Checkbox,
-  Chip,
+	Checkbox,
+	Chip,
 } from "react-native-paper";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import colors from "../../res/colors";
 import { FAB } from "react-native-paper";
 import { getPacientes } from "../../libs/http";
 
-export default function Pacientes({navigation}) {
+export default function Pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
-  const [data, setData] = React.useState([]); 
-  
-  const [colors, setColors] = useState({
-    value: '',
-    list: [
-      { _id: '1', value: 'BLUE' },
-      { _id: '2', value: 'RED' },
-      { _id: '3', value: 'GREEN' },
-      { _id: '4', value: 'YELLOW' },
-    ],
-    selectedList: [],
-    error: '',
-  });
-  
-  useEffect(() => {
-    getPacientes().then((res) => {
-      setData(res.data)
-    })
-  }, [])
+	const [data, setData] = React.useState([]);
 
-  const handleFilter = () => {
-    getPacientes(nombre, apellido).then((res) => {
-      setData(res.data)
-    })
-  }
-
-  const [ascSort,setAscSort] = useState(true)
-  const handleSort = (sortBy) =>{
-	//   console.log("before", ascSort)
-	  setAscSort(!ascSort)
-	//   console.log("after", ascSort)
-	// alert('ya aprete')
-	const sortedData = data.sort((a,b) => {
-		if (ascSort) {
-			return a[sortBy] > b[sortBy] ? 1 : -1
-		} else {
-			return b[sortBy] > a[sortBy] ? 1 : -1
-		}
+	const [colors, setColors] = useState({
+		value: "",
+		list: [
+			{ _id: "1", value: "BLUE" },
+			{ _id: "2", value: "RED" },
+			{ _id: "3", value: "GREEN" },
+			{ _id: "4", value: "YELLOW" },
+		],
+		selectedList: [],
+		error: "",
 	});
-	// console.log(sortedData.map(x=>x.nombre))
-	// console.log(ascSort)
-	// console.log(sortedData)
-	// setData([]);
-	setData([...sortedData]);
-  }
 
-  const handleFabPress = () => {
-	  navigation.navigate('CrearPaciente')
+	useEffect(() => {
+		getPacientes().then((res) => {
+			setData(res.data);
+		});
+	}, []);
 
-  }
+	const handleFilter = () => {
+		getPacientes(nombre, apellido).then((res) => {
+			setData(res.data);
+		});
+	};
+
+	const [ascSort, setAscSort] = useState(true);
+	const handleSort = (sortBy) => {
+		//   console.log("before", ascSort)
+		setAscSort(!ascSort);
+		//   console.log("after", ascSort)
+		// alert('ya aprete')
+		const sortedData = data.sort((a, b) => {
+			if (ascSort) {
+				return a[sortBy] > b[sortBy] ? 1 : -1;
+			} else {
+				return b[sortBy] > a[sortBy] ? 1 : -1;
+			}
+		});
+		console.log(sortedData.map(x=>x.tipoPersona))
+		// console.log(ascSort)
+		// console.log(sortedData)
+		// setData([]);
+		setData([...sortedData]);
+	};
+
+	const handleFabPress = () => {
+		navigation.navigate("CrearPaciente");
+	};
 
 	return (
 		<View style={styles.container}>
@@ -88,13 +87,8 @@ export default function Pacientes({navigation}) {
 				style={styles.space}
 			/>
 
-
-
 			<View style={styles.col2}>
-				<Button
-					mode="contained"
-					onPress={handleFilter}
-				>
+				<Button mode="contained" onPress={handleFilter}>
 					Filtrar
 				</Button>
 				<Button
@@ -107,51 +101,61 @@ export default function Pacientes({navigation}) {
 			</View>
 
 			<Divider style={styles.space} colors={colors.primary} />
-        <DataTable style={{ marginLeft: 0 }}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cell} onPress={_=>handleSort('nombre')} sortDirection={ascSort?'ascending':'descending'}>
-              Nombre
-            </DataTable.Title>
-            <DataTable.Title style={styles.cell}>
-              Apellido
-            </DataTable.Title>
-            <DataTable.Title style={styles.cell}>
-              Cedula
-            </DataTable.Title>
-            <DataTable.Title style={styles.cell}>
-              Fec. Nac.
-            </DataTable.Title>
-            <DataTable.Title numeric>Opc.</DataTable.Title>
-          </DataTable.Header>
-          </DataTable>
-      <ScrollView>
-      <DataTable style={{ marginLeft: 0 }}>
+			<DataTable style={{ marginLeft: 0 }}>
+				<DataTable.Header>
+					<DataTable.Title
+						style={styles.cell}
+						onPress={(_) => handleSort("nombre")}
+						sortDirection={ascSort ? "ascending" : "descending"}
+					>
+						Nombre
+					</DataTable.Title>
+					<DataTable.Title style={styles.cell}>
+						Apellido
+					</DataTable.Title>
+					<DataTable.Title style={styles.cell}>
+						Cedula
+					</DataTable.Title>
+					<DataTable.Title style={styles.cell}>
+						Fec. Nac.
+					</DataTable.Title>
+					<DataTable.Title numeric>Opc.</DataTable.Title>
+				</DataTable.Header>
+			</DataTable>
+			<ScrollView>
+				<DataTable style={{ marginLeft: 0 }}>
+					{data
+						? data.map((item, index) => {
+								return (
+									<DataTable.Row key={index}>
+										<DataTable.Cell style={styles.cell}>
+											{item.nombre}
+										</DataTable.Cell>
+										<DataTable.Cell style={styles.cell}>
+											{item.apellido}
+										</DataTable.Cell>
+										<DataTable.Cell style={styles.cell}>
+											{item.cedula}
+										</DataTable.Cell>
+										<DataTable.Cell style={styles.cell}>
+											{item.fechaNacimiento}
+										</DataTable.Cell>
+										<DataTable.Cell numeric>
+											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
+											<AntDesign
+												name="edit"
+												size={20}
+												color={colors.primary}
+											/>
+										</DataTable.Cell>
+									</DataTable.Row>
+								);
+						  })
+						: null}
+				</DataTable>
+			</ScrollView>
 
-          {data ? data.map((item, index) => {
-              return  <DataTable.Row key={index}>
-              <DataTable.Cell style={styles.cell}>{item.nombre}</DataTable.Cell>
-              <DataTable.Cell style={styles.cell}>{item.apellido}</DataTable.Cell>
-              <DataTable.Cell style={styles.cell}>{item.cedula}</DataTable.Cell>
-              <DataTable.Cell style={styles.cell}>{item.fechaNacimiento}</DataTable.Cell>
-              <DataTable.Cell numeric>
-                {/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
-                <AntDesign
-                  name="edit"
-                  size={20}
-                  color={colors.primary}
-                />
-                </DataTable.Cell>
-                </DataTable.Row>
-              }): null}
-              
-        </DataTable>
-      </ScrollView>
-
-			<FAB
-				style={styles.fab}
-				icon="plus"
-				onPress={handleFabPress}
-			/>
+			<FAB style={styles.fab} icon="plus" onPress={handleFabPress} />
 		</View>
 	);
 }
