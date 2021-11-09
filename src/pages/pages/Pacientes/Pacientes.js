@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Text, StyleSheet, View, ScrollView, ToastAndroid } from "react-native";
+import { Text, StyleSheet, View, ScrollView, ToastAndroid, Keyboard } from "react-native";
 import { Button, DataTable, TextInput, Divider } from "react-native-paper";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import colors from "../../res/colors";
@@ -11,24 +11,23 @@ export default function pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
 	const [apellido, setApellido] = React.useState("");
 	const [data, setData] = React.useState([]);
+	const [hide, setHide] = React.useState(true);
 
 	useEffect(() => {
 		getPacientes().then((res) => {
 			setData(res.data);
 		});
-		const willFocusSubscription = navigation.addListener(
-			"focus",
-			() => {
-				getPacientes().then((res) => {
-					setData(res.data);
-				});
-			}
-		);
+		const willFocusSubscription = navigation.addListener("focus", () => {
+			getPacientes().then((res) => {
+				setData(res.data);
+			});
+		});
 
 		return willFocusSubscription;
 	}, []);
 
 	const handleFilter = () => {
+		Keyboard.dismiss();
 		getPacientes(nombre, apellido).then((res) => {
 			setData(res.data);
 		});
@@ -57,10 +56,6 @@ export default function pacientes({ navigation }) {
 		console.log(JSON.stringify(paciente));
 		console.log("try to delete", paciente.idPersona);
 		const { res, error } = await deletePaciente(paciente.idPersona);
-		// const res = true
-		// const error = false
-		// console.log("deleted.4");
-		// console.log(res);
 		if (res) {
 			console.log("deleted");
 			const newData = data.filter(
@@ -77,34 +72,50 @@ export default function pacientes({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<Text style={[styles.space, styles.title]}>Filtrar Paciente:</Text>
-			<TextInput
-				mode="outlined"
-				label="Nombre"
-				value={nombre}
-				onChangeText={(text) => setNombre(text)}
-				style={styles.space}
-			/>
-			<TextInput
-				mode="outlined"
-				label="Apellido"
-				value={apellido}
-				onChangeText={(text) => setApellido(text)}
-				style={styles.space}
-			/>
+			{hide ? (
+				<View>
+					<Text style={[styles.space, styles.title]}>
+						Filtrar Paciente:
+					</Text>
+					<TextInput
+						mode="outlined"
+						label="Nombre"
+						value={nombre}
+						onChangeText={(text) => setNombre(text)}
+						style={styles.space}
+					/>
+					<TextInput
+						mode="outlined"
+						label="Apellido"
+						value={apellido}
+						onChangeText={(text) => setApellido(text)}
+						style={styles.space}
+					/>
 
-			<View style={styles.col2}>
-				<Button mode="contained" onPress={handleFilter}>
-					Filtrar
-				</Button>
-				<Button
-					mode="contained"
-					// onPress={filterReservation}
-					color={colors.secondary}
-				>
-					Ocultar filtros
-				</Button>
-			</View>
+					<View style={styles.col2}>
+						<Button mode="contained" onPress={handleFilter}>
+							Filtrar
+						</Button>
+						<Button
+							mode="contained"
+							onPress={(_) => setHide(!hide)}
+							color={colors.secondary}
+						>
+							Ocultar filtros
+						</Button>
+					</View>
+				</View>
+			) : (
+				<View style={styles.col2}>
+					<Button
+						mode="contained"
+						onPress={(_) => setHide(!hide)}
+						color={colors.secondary}
+					>
+						Mostrar filtros
+					</Button>
+				</View>
+			)}
 
 			<Divider style={styles.space} colors={colors.primary} />
 			<DataTable style={{ marginLeft: 0 }}>
