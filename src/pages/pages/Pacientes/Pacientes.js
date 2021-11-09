@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Text, StyleSheet, View, ScrollView } from "react-native";
-import {
-	Button,
-	DataTable,
-	TextInput,
-	Divider,
-} from "react-native-paper";
+import { Text, StyleSheet, View, ScrollView, ToastAndroid } from "react-native";
+import { Button, DataTable, TextInput, Divider } from "react-native-paper";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import colors from "../../res/colors";
 import { FAB } from "react-native-paper";
-import { getPacientes } from "../../libs/http";
+import { getPacientes, deletePaciente } from "../../libs/http";
 
 export default function Pacientes({ navigation }) {
 	const [nombre, setNombre] = React.useState("");
@@ -45,6 +40,27 @@ export default function Pacientes({ navigation }) {
 
 	const handleFabPress = () => {
 		navigation.navigate("CrearPaciente");
+	};
+
+	const handleDelete = async (index) => {
+		const paciente = data[index];
+		console.log(JSON.stringify(paciente));
+		console.log('try to delete', paciente.idPersona);
+		const {res,error} = await deletePaciente(paciente.idPersona);
+		// const res = true
+		// const error = false
+		// console.log("deleted.4");
+		// console.log(res);
+		if (res){
+			console.log('deleted');
+			const newData = data.filter((x) => x.idPersona !== paciente.idPersona);
+			setData(newData);
+			ToastAndroid.show('Paciente eliminado', ToastAndroid.SHORT);
+		}
+		if(error){
+			alert("error al borrar!")
+			console.log(error);
+		}
 	};
 
 	return (
@@ -121,15 +137,20 @@ export default function Pacientes({ navigation }) {
 										<DataTable.Cell numeric>
 											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
 											<AntDesign
-												name='edit'
+												name="edit"
 												size={20}
 												color={colors.primary}
 											/>
 										</DataTable.Cell>
-										<DataTable.Cell numeric>
-											{/* <DataTable.Cell numeric onPress={goToEditReservation}> */}
+										<DataTable.Cell
+											style={{
+												alignItems: "center",
+												justifyContent: "center",
+											}}
+											onPress={(_) => handleDelete(index)}
+										>
 											<AntDesign
-												name='delete'
+												name="delete"
 												size={20}
 												color={colors.primary}
 											/>

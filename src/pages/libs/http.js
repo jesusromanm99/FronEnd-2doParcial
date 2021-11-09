@@ -158,6 +158,16 @@ const createPaciente = async (paciente)=>{
     }
 }
 
+const deletePaciente = async (idPersona)=>{
+    const endPoint=`${server}stock-nutrinatalia/persona/${idPersona}`
+    try{
+        const res = await axios.delete(endPoint)
+        return {res}
+    }catch(error){
+        return {error}
+    }
+}
+
 
 /*Export  */
 export {
@@ -171,4 +181,5 @@ export {
     getUsers,
     getPacientes,
     createPaciente,
+    deletePaciente,
 }
