@@ -30,6 +30,18 @@ const getUsers=async()=>{
     }
 }
 
+/* Obtener las categorias */
+const getCategorias=async()=>{
+    const endPoint=server+'stock-nutrinatalia/categoria'
+    try{
+        const {data} = await axios.get(endPoint)
+        return {data}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
 /* Obtener los productos */
 const getTipoProductos=async()=>{
     const endPoint=server+'stock-nutrinatalia/tipoProducto'
@@ -213,6 +225,7 @@ export {
     getUsersFromSystem,
     getUsers,
     getTipoProductos,
+    getCategorias,
     getReservation,
     getFichaClinica,
     createFichaClinica,
