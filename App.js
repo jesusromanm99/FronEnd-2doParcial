@@ -5,6 +5,8 @@ import {ReservaStackNavigator} from './src/pages/components/navigation/StackNavi
 import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import TabNavigator from './src/pages/components/navigation/TabNavigator';
 import colors from './src/pages/res/colors';
+import Login from './src/pages/pages/Login';
+
 export default function App() {
   const theme = {
     ...DefaultTheme,
@@ -14,10 +16,14 @@ export default function App() {
       accent: colors.accent,
     },
   };
+
+  const [logged, setLogged] = React.useState(false);
+  console.log('logged');
+
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-          <TabNavigator /> 
+        {logged ? <TabNavigator /> : <Login onLogin={_=>setLogged(true)} />}
       </PaperProvider>
     </NavigationContainer>
   );
