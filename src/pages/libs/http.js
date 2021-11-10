@@ -160,7 +160,7 @@ const getAllFicha=async()=>{
     const endPoint=server+'stock-nutrinatalia/fichaClinica'
     try{
         const {data}=await axios.get(endPoint)
-        console.log('Fichas',data)
+        //console.log('Fichas',data)
         return {data}
     }catch(error){
             console.log('Error:',error)

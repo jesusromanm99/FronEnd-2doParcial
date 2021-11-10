@@ -1,6 +1,6 @@
 import React from "react";
 import { TextInput, Button, Text } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import DropDown from "react-native-paper-dropdown";
 import {createFichaClinica,getUsersFromSystem,getUsers,getTipoProductos} from "../../libs/http";
 import CustomDialog from "../../components/CustomDialog";
@@ -106,7 +106,7 @@ const CrearFichaClinica=({navigation,route})=>{
     },[])
 
     return(
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             
             <Text style={[styles.containeritem,styles.titlesmall]}> Paciente:</Text>
             <DropDown
@@ -176,7 +176,7 @@ const CrearFichaClinica=({navigation,route})=>{
                             visible={showDialog} setVisible={setShowDialog}
                             action={goBack}
                             />}
-        </View>
+        </ScrollView>
     )
 }
 const styles=StyleSheet.create({

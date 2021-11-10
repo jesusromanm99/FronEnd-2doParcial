@@ -116,7 +116,7 @@ export default function Reserva({navigation}){
              <ActivityIndicator animating={true} color={colors.primary} />
              : 
              <>
-                <Text style={[styles.space,styles.title]}>Filtar reserva:</Text>
+                <Text style={[styles.space,styles.title]}>Filtrar reserva:</Text>
                 <TextInput 
                     mode="outlined"
                     label="Empleado"

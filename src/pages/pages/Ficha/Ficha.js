@@ -105,7 +105,7 @@ const filterFichaClinica=()=>{
     }
     setListFichas([...result])  
   }
-
+  
   React.useEffect(()=>{
     // getFichaFromServer()
     getFichaOnLoad()
