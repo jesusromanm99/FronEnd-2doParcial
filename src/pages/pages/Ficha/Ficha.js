@@ -197,16 +197,14 @@ const filterFichaClinica=()=>{
                   
                   <DataTable.Title style={styles.cell}>Fisioterapeuta</DataTable.Title>
                   <DataTable.Title style={styles.cell}>Paciente</DataTable.Title>
-                  <DataTable.Title style={styles.cell}>Motivo</DataTable.Title>
-                  <DataTable.Title style={styles.cell}>Diagnóstico</DataTable.Title>
                   <DataTable.Title style={styles.cell}>Tratamiento</DataTable.Title>
-                  <DataTable.Title numeric>Editar</DataTable.Title>
+                  <DataTable.Title numeric>Ver</DataTable.Title>
 
               </DataTable.Header>
               {listFichas.map((item,index)=>{
-                  return <FichaClinicaItem key={index} motivoConsulta={item.motivoConsulta} idCliente={item.idCliente} 
+                  return <FichaClinicaItem key={index} motivoConsulta={item.motivoConsulta} idCliente={item.idCliente} observacion={item.observacion}
                                           idEmpleado={item.idEmpleado} diagnostico={item.diagnostico} idTipoProducto={item.idTipoProducto}
-                                           navigation={navigation} idFichaClinica={item.idFichaClinica}
+                                           navigation={navigation} idFichaClinica={item.idFichaClinica} fechaHora={item.fechaHora}
                                           />
               })}
               
@@ -238,7 +236,7 @@ const styles = StyleSheet.create({
       bottom: 0,
     },
     cell:{
-      flex:2,
+      flex:4,
     },
     space:{
         marginTop:10,
