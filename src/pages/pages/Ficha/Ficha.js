@@ -14,12 +14,7 @@ export default function Ficha({navigation}){
   const [searchEmpleado, setSearchEmpleado] = React.useState('');
   const [searchCliente, setSearchCliente] = React.useState('');
   const [searchTipoProducto, setSearchTipoProducto] = React.useState('');
-  const [showDropDownProducto, setShowDropDownProducto] = React.useState(false);
-  const [productoOptions,setProductoOptions]=React.useState([])  
   const [showEndDate,setEndShowDate]=React.useState(false)
-  const [idCategoria,setIdCategoria]=React.useState(1)
-  const [showDropDownCategoria, setShowDropDownCategoria] = React.useState(false);
-  const [categoriaOptions,setCategoriaOptions]=React.useState([])
   const [startDate,setStartDate]=React.useState(null)
   const [endDate,setEndDate]=React.useState(null) 
   const [showStartDate,setStartShowDate]=React.useState(false)
@@ -95,7 +90,10 @@ const filterFichaClinica=()=>{
     }
 
     if(searchTipoProducto){
-      result = listFichas.filter((item)=>item.idTipoProducto.descripcion==searchTipoProducto)
+        console.log('tipo producto',searchTipoProducto)
+        result = result.length
+                ? result.filter((item)=>item.idTipoProducto.descripcion==searchTipoProducto)
+                : listFichas.filter((item)=>item.idTipoProducto.descripcion==searchTipoProducto)
     }
 
     if(startDate && endDate){   
@@ -111,32 +109,6 @@ const filterFichaClinica=()=>{
   React.useEffect(()=>{
     // getFichaFromServer()
     getFichaOnLoad()
-  },[])
-  
-  /*Use Effect para inicializar la lista de categorias */
-  React.useEffect(async ()=>{
-    const {data,error}= await getCategorias()
-    if(data){
-        setCategoriaOptions(data.lista.map(categoria => {
-            return {
-                'label':`${categoria.descripcion}`,
-                'value':`${categoria.idCategoria}`
-            }
-        }));      
-    }
-  },[])
- 
-  /*Use Effect para inicializar la lista de productos */
-  React.useEffect(async ()=>{
-    const {data,error}= await getTipoProductos()
-    if(data){
-        setProductoOptions(data.lista.map(producto => {
-            return {
-                'label':`${producto.descripcion}`,
-                'value':`${producto.descripcion}`
-            }
-        }));      
-    }
   },[])
 
   return(
@@ -162,28 +134,14 @@ const filterFichaClinica=()=>{
                     onChangeText={text => setSearchCliente(text)}
                     style={styles.space}
                 />
-                  <DropDown
-                      label={"Categoria"}
-                      mode={"outlined"}
-                      visible={showDropDownCategoria}
-                      showDropDown={() => setShowDropDownCategoria(true)}
-                      onDismiss={() => setShowDropDownCategoria(false)}
-                      value={idCategoria}
-                      setValue={setIdCategoria}
-                      list={categoriaOptions}
-                      style={styles.containeritem}
-                  />
-                  <DropDown
-                      label={"Tratamiento"}
-                      mode={"outlined"}
-                      visible={showDropDownProducto}
-                      showDropDown={() => setShowDropDownProducto(true)}
-                      onDismiss={() => setShowDropDownProducto(false)}
-                      value={searchTipoProducto}
-                      setValue={setSearchTipoProducto}
-                      list={productoOptions}
-                      style={styles.containeritem}
-                  />
+                  
+                <TextInput 
+                    mode="outlined"
+                    label="Tratamiento"
+                    value={searchTipoProducto}
+                    onChangeText={text => setSearchTipoProducto(text)}
+                    style={styles.space}
+                />
               </View>
               <View style={[styles.space,{flexDirection:'row',justifyContent:'space-evenly'}]}>
                         <Text>
