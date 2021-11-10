@@ -1,6 +1,7 @@
 /* HTTP REQUESTS  */
 
 import axios from "axios"
+import dateFormat from 'dateformat'
 const server="https://equipoyosh.com/"
 
 /* ----------------Global----------------------------- */
@@ -163,6 +164,68 @@ const createFicha=async({motivoConsulta,diagnostico,observacion,idEmpleado,idCli
 
 /*----------------------Paciente--------------------------- */
 
+const getPacientes = async(name, lastname, sortBy)=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    try{
+        let queryParams = ''
+        if(name && lastname){
+            queryParams = `?like=S&ejemplo={"nombre":"${name}","apellido":"${lastname}"}`
+        }else if (name){    
+            queryParams = `?like=S&ejemplo={"nombre":"${name}"}`
+        }
+        else if (lastname){
+            queryParams = `?like=S&ejemplo={"apellido":"${lastname}"}`
+        }
+        if(sortBy){
+            queryParams+=`?&orderBy=${sortBy}`
+        }
+        console.log('QueryParams',queryParams)
+        console.log('url', endPoint+queryParams)
+        queryParams = encodeURI(queryParams)
+        const {data}=await axios.get(endPoint+queryParams)
+        return {data: data.lista}
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+const createPaciente = async (paciente)=>{
+    const endPoint=server+'stock-nutrinatalia/persona'
+    try{
+        const fecha = paciente.fechaNacimiento
+        console.log('Fecha',fecha)
+        paciente.fechaNacimiento = dateFormat(fecha, 'yyyy-mm-dd hh:mm:ss', 'en-US')
+        console.log('Paciente',paciente.fechaNacimiento)
+        paciente.tipoPersona='FISICA'
+        console.log('Paciente',paciente)
+        const res = await axios.post(endPoint,paciente)
+        return {data:res.data}
+    }catch(error){
+        return {error}
+    }
+}
+
+const deletePaciente = async (idPersona)=>{
+    const endPoint=`${server}stock-nutrinatalia/persona/${idPersona}`
+    try{
+        const res = await axios.delete(endPoint)
+        return {res}
+    }catch(error){
+        return {error}
+    }
+}
+
+const getPaciente = async (idPersona)=>{
+    const endPoint=`${server}stock-nutrinatalia/persona/${idPersona}`
+    try{
+        const res = await axios.get(endPoint)
+        return {data:res.data}
+    }catch(error){
+        return {error}
+    }
+}
+
 
 /*Export  */
 export {
@@ -176,5 +239,9 @@ export {
     getUsers,
     getReservation,
     createFicha,
-    getAllFicha
+    getAllFicha,
+    getPacientes,
+    createPaciente,
+    deletePaciente,
+    getPaciente,
 }
