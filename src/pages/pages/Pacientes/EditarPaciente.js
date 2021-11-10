@@ -28,9 +28,9 @@ const editarPaciente = ({ route, navigation }) => {
 
     const handleSaveButton = async () => {
 		const removePaciente = async() => {
-			const {data, error} = await deletePaciente(route.params.id);
+			const {res, error} = await deletePaciente(route.params.id);
 			if (error) return false
-			if (data) return true
+			if (res) return true
 		}
 		const rmOk = await removePaciente()
 		if(!rmOk){
