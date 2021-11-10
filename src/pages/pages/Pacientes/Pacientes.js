@@ -1,3 +1,4 @@
+"user strict";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -40,14 +41,14 @@ export default function pacientes({ navigation }) {
 		});
 	};
 
-	const [ascSort, setAscSort] = useState(true);
+	const [sort, setSort] = useState({ desc: true, column: ""});
 	const handleSort = (sortBy) => {
-		setAscSort(!ascSort);
+		setSort({ desc: !sort.desc, column: sortBy });
 		const sortedData = data.sort((a, b) => {
-			if (ascSort) {
-				return a[sortBy] > b[sortBy] ? 1 : -1;
-			} else {
+			if (sort.desc) {
 				return b[sortBy] > a[sortBy] ? 1 : -1;
+			} else {
+				return a[sortBy] > b[sortBy] ? 1 : -1;
 			}
 		});
 		console.log(sortedData.map((x) => x.tipoPersona));
@@ -76,7 +77,7 @@ export default function pacientes({ navigation }) {
 			console.log(error);
 		}
 	};
-	
+
 	const handleRecargar = () => {
 		getPacientes().then((res) => {
 			setData(res.data);
@@ -121,10 +122,7 @@ export default function pacientes({ navigation }) {
 				</View>
 			) : (
 				<View style={styles.col2}>
-					<Button
-						mode="contained"
-						onPress={handleRecargar}
-					>
+					<Button mode="contained" onPress={handleRecargar}>
 						Recargar
 					</Button>
 					<Button
@@ -140,20 +138,52 @@ export default function pacientes({ navigation }) {
 			<Divider style={styles.space} colors={colors.primary} />
 			<DataTable style={{ marginLeft: 0 }}>
 				<DataTable.Header>
-					<DataTable.Title
+					<DataTable.Title id="nombre"
 						style={styles.cell}
 						onPress={(_) => handleSort("nombre")}
-						sortDirection={ascSort ? "ascending" : "descending"}
+						sortDirection={
+							sort.column === "nombre"
+								? sort.desc
+									? "descencing"
+									: "ascending"
+								: null
+						}
 					>
 						Nombre
 					</DataTable.Title>
-					<DataTable.Title style={styles.cell}>
+					<DataTable.Title id="apellido"
+						style={styles.cell}
+						onPress={(_) => handleSort("apellido")}
+						sortDirection={
+							sort.column === "apellido"
+								? sort.desc
+									? "descencing"
+									: "ascending"
+								: null
+						}
+					>
 						Apellido
 					</DataTable.Title>
-					<DataTable.Title style={styles.cell}>
+					<DataTable.Title id="cedula" style={styles.cell}
+						onPress={(_) => handleSort("cedula")}
+						sortDirection={
+							sort.column === "cedula"
+								? sort.desc
+									? "descencing"
+									: "ascending"
+								: null
+						}>
 						Cedula
 					</DataTable.Title>
-					<DataTable.Title style={styles.cell}>
+					<DataTable.Title id="fechaNacimiento" style={styles.cell}
+						onPress={(_) => handleSort("fechaNacimiento")}
+						sortDirection={
+							sort.column === "fechaNacimiento"
+								? sort.desc
+									? "descencing"
+									: "ascending"
+								: null
+						}>
 						Fec. Nac.
 					</DataTable.Title>
 					<DataTable.Title style={{ flex: 2 }}>
