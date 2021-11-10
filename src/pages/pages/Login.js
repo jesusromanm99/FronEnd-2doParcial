@@ -5,66 +5,75 @@ import {
 	View,
 	TouchableOpacity,
 	KeyboardAvoidingView,
-  ImageBackground,
+	ImageBackground,
 } from "react-native";
 import { Button, TextInput, ThemeProvider, Title } from "react-native-paper";
 import colors from "../res/colors";
 
-export default function Login({onLogin}) {
-
+export default function Login({ onLogin }) {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
+
+
+	const handleLogin = () => {
+		if (email.value != "usuario2" || password.value != "admin") {
+			alert("Usuario o contraseña incorrecta");
+			return;
+		}
+
+		onLogin();
+	};
+
 	return (
-    <ImageBackground
-      source={require('../res/background_dot.png')}
-      resizeMode="repeat"
-      style={styles.background}
-      >
-      <KeyboardAvoidingView style={styles.container} enabled={false}>
-        <Title>Welcome back.</Title>
-        <TextInput
-          label="Email"
-          returnKeyType="next"
-          value={email.value}
-          onChangeText={(text) => setEmail({ value: text, error: "" })}
-          error={!!email.error}
-          errorText={email.error}
-          autoCapitalize="none"
-          autoCompleteType="email"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          style={styles.input}
-        />
-        <TextInput
-          label="Password"
-          returnKeyType="done"
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: "" })}
-          error={!!password.error}
-          errorText={password.error}
-          secureTextEntry
-          style={styles.input}
-          />
-        <View style={styles.forgotPassword}>
-          <TouchableOpacity
-            onPress={() => alert("como vas a olvidar tu pass? :|")}
-          >
-            <Text style={styles.forgot}>Forgot your password?</Text>
-          </TouchableOpacity>
-        </View>
-        <Button mode="contained" onPress={onLogin}>
-          Login
-        </Button>
-        <View style={styles.row}>
-          <Text>Don’t have an account? </Text>
-          <TouchableOpacity
-            onPress={() => alert("otro dia!")}
-          >
-            <Text style={styles.link}>Sign up</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </ImageBackground>
+		<ImageBackground
+			source={require("../res/background_dot.png")}
+			resizeMode="repeat"
+			style={styles.background}
+		>
+			<KeyboardAvoidingView style={styles.container} enabled={false}>
+				<Title>Bienvenido de vuelta.</Title>
+				<TextInput
+					label="Usuario"
+					returnKeyType="next"
+					value={email.value}
+					onChangeText={(text) => setEmail({ value: text })}
+					autoCapitalize="none"
+					style={styles.input}
+				/>
+				<TextInput
+					label="Contraseña"
+					returnKeyType="done"
+					value={password.value}
+					onChangeText={(text) =>
+						setPassword({ value: text, error: "" })
+					}
+					error={!!password.error}
+					errorText={password.error}
+					secureTextEntry
+					style={styles.input}
+				/>
+				<View style={styles.forgotPassword}>
+					<TouchableOpacity
+						onPress={() =>
+							alert("Como vas a olvidar tu pass? 'usuario2' 'admin'")
+						}
+					>
+						<Text style={styles.forgot}>
+							Olvidaste tu contraseña?
+						</Text>
+					</TouchableOpacity>
+				</View>
+				<Button mode="contained" onPress={handleLogin}>
+					Login
+				</Button>
+				<View style={styles.row}>
+					<Text>Aún no tienes una cuenta? </Text>
+					<TouchableOpacity onPress={() => alert("otro dia!")}>
+						<Text style={styles.link}>Registrate</Text>
+					</TouchableOpacity>
+				</View>
+			</KeyboardAvoidingView>
+		</ImageBackground>
 	);
 }
 
@@ -100,12 +109,12 @@ const styles = StyleSheet.create({
 		// alignItems: "center",
 		justifyContent: "center",
 	},
-  input: {
-    marginTop: 4,
-    color: colors.primary,
-    backgroundColor: 'white',
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    // borderRadius: 5,
-  },
+	input: {
+		marginTop: 4,
+		color: colors.primary,
+		backgroundColor: "white",
+		borderColor: "gray",
+		borderWidth: 0.5,
+		// borderRadius: 5,
+	},
 });

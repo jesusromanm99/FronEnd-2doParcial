@@ -19,11 +19,14 @@ export default function App() {
 
   const [logged, setLogged] = React.useState(false);
   console.log('logged');
+  const handleLogin = () => {
+    setLogged(true)
+  }
 
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-        {logged ? <TabNavigator /> : <Login onLogin={_=>setLogged(true)} />}
+        {logged ? <TabNavigator /> : <Login onLogin={handleLogin} />}
       </PaperProvider>
     </NavigationContainer>
   );
