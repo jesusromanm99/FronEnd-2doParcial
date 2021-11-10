@@ -51,7 +51,7 @@ export default function pacientes({ navigation }) {
 				return a[sortBy] > b[sortBy] ? 1 : -1;
 			}
 		});
-		console.log(sortedData.map((x) => x.tipoPersona));
+		// console.log(sortedData.map((x) => x.tipoPersona));
 		setData([...sortedData]);
 	};
 
@@ -61,11 +61,11 @@ export default function pacientes({ navigation }) {
 
 	const handleDelete = async (index) => {
 		const paciente = data[index];
-		console.log(JSON.stringify(paciente));
-		console.log("try to delete", paciente.idPersona);
+		// console.log(JSON.stringify(paciente));
+		// console.log("try to delete", paciente.idPersona);
 		const { res, error } = await deletePaciente(paciente.idPersona);
 		if (res) {
-			console.log("deleted");
+			// console.log("deleted");
 			const newData = data.filter(
 				(x) => x.idPersona !== paciente.idPersona
 			);
@@ -74,7 +74,7 @@ export default function pacientes({ navigation }) {
 		}
 		if (error) {
 			alert("error al borrar!");
-			console.log(error);
+			// console.log(error);
 		}
 	};
 
